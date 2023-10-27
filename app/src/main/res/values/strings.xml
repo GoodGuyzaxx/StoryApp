@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Story App</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="login_quote">Ayo buat cerita Anda sendiri</string>
+    <string name="login_desc">Kami senang Anda kembali</string>
+    <string name="signup_text">Belum punya akun? Daftar sekarang!</string>
+    <string name="signup_quote">Silakan Lengkapi Data Dirimu Yah</string>
+    <string name="signup_name_text">Name</string>
+    <string name="sign_up_button">Sign-up</string>
 </resources>
