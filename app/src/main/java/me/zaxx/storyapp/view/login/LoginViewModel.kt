@@ -1,0 +1,42 @@
+package me.zaxx.storyapp.view.login
+
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import me.zaxx.storyapp.data.repository.StoryRepository
+import me.zaxx.storyapp.data.retrofit.ApiConfig
+import me.zaxx.storyapp.data.retrofit.response.LoginResponse
+import retrofit2.HttpException
+
+
+class LoginViewModel(private val repository: StoryRepository): ViewModel() {
+
+    private val _loginResponse = MutableLiveData<LoginResponse>()
+    val loginResponse: LiveData<LoginResponse> = _loginResponse
+
+    fun getLogin(email: String, password: String){
+        viewModelScope.launch {
+            try {
+//                val response = repository.login(email, password)
+                val successResponse = ApiConfig.getApiService().login(email, password)
+                _loginResponse.postValue(successResponse)
+            } catch (e: HttpException) {
+                val jsonString = e.response()?.errorBody()?.string()
+                val errorBody = Gson().fromJson(jsonString, LoginResponse::class.java)
+                val errorMessage = errorBody.message
+
+                _loginResponse.postValue(errorBody)
+                Log.d(TAG, "getLogin: $errorMessage")
+            }
+        }
+    }
+
+    companion object{
+        private val TAG = LoginViewModel::class.java.simpleName
+    }
+}
+

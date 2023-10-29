@@ -11,22 +11,47 @@ import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.zaxx.storyapp.R
+import me.zaxx.storyapp.data.retrofit.ApiConfig
+import me.zaxx.storyapp.data.retrofit.response.LoginResponse
 import me.zaxx.storyapp.databinding.ActivityLoginBinding
+import me.zaxx.storyapp.view.ViewModelFactory
 import me.zaxx.storyapp.view.main.MainActivity
 import me.zaxx.storyapp.view.signup.SignupActivity
+import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding
+    private val loginViewModel by viewModels<LoginViewModel>{
+        ViewModelFactory.getInstance(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         signupText()
 
+        loginViewModel.loginResponse.observe(this){
+            if (it.error) {
+                showToast(it.message)
+            } else {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                showToast("Login ${it.message}")
+            }
+        }
+
         binding.btnlogin.setOnClickListener {
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intent)
+            val email = binding.emailEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
+            loginViewModel.getLogin(email,password)
         }
 
     }
@@ -47,5 +72,9 @@ class LoginActivity : AppCompatActivity() {
         binding.tvSignup.text = spanString
         binding.tvSignup.movementMethod = LinkMovementMethod.getInstance()
         Log.d("text as Button", "signupText: $spanString")
+    }
+
+    private fun showToast(message: String){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
     }
 }
