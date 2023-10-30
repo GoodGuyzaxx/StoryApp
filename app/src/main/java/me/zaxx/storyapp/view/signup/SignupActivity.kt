@@ -1,11 +1,13 @@
 package me.zaxx.storyapp.view.signup
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import me.zaxx.storyapp.databinding.ActivitySignupBinding
 import me.zaxx.storyapp.view.ViewModelFactory
+import me.zaxx.storyapp.view.login.LoginActivity
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -36,7 +38,10 @@ class SignupActivity : AppCompatActivity() {
                     setTitle("Yeahh!!")
                     setMessage("Akun anda Sudah Dibuat ${name}")
                     setPositiveButton("Lanjut") {_,_ ->
-
+                        val intent = Intent(context, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
                     }
                     create()
                     show()
