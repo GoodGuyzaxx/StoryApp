@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
+import me.zaxx.storyapp.data.pref.UserModel
 import me.zaxx.storyapp.data.repository.StoryRepository
 import me.zaxx.storyapp.data.retrofit.ApiConfig
 import me.zaxx.storyapp.data.retrofit.response.LoginResponse
@@ -18,20 +19,31 @@ class LoginViewModel(private val repository: StoryRepository): ViewModel() {
     private val _loginResponse = MutableLiveData<LoginResponse>()
     val loginResponse: LiveData<LoginResponse> = _loginResponse
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun getLogin(email: String, password: String){
+        _isLoading.postValue(true)
         viewModelScope.launch {
             try {
 //                val response = repository.login(email, password)
                 val successResponse = ApiConfig.getApiService().login(email, password)
+                saveSession(UserModel(email,"token"))
                 _loginResponse.postValue(successResponse)
             } catch (e: HttpException) {
                 val jsonString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonString, LoginResponse::class.java)
                 val errorMessage = errorBody.message
-
+                _isLoading.postValue(false)
                 _loginResponse.postValue(errorBody)
                 Log.d(TAG, "getLogin: $errorMessage")
             }
+        }
+    }
+
+    private fun saveSession(user: UserModel){
+        viewModelScope.launch {
+            repository.saveSession(user)
         }
     }
 
