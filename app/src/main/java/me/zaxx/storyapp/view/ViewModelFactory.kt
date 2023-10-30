@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import me.zaxx.storyapp.data.di.Injection
 import me.zaxx.storyapp.data.repository.StoryRepository
 import me.zaxx.storyapp.view.login.LoginViewModel
+import me.zaxx.storyapp.view.main.MainViewModel
 import me.zaxx.storyapp.view.signup.SignupViewModel
 
 class ViewModelFactory(private val repository: StoryRepository): ViewModelProvider.NewInstanceFactory() {
@@ -17,6 +18,8 @@ class ViewModelFactory(private val repository: StoryRepository): ViewModelProvid
             return LoginViewModel(repository) as T
         }else if (modelClass.isAssignableFrom(SignupViewModel::class.java)){
             return SignupViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(MainViewModel::class.java)){
+            return MainViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknow ViewModel Class: ${modelClass.name}")
     }

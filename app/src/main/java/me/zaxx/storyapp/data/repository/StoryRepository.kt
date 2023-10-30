@@ -8,10 +8,10 @@ import me.zaxx.storyapp.data.retrofit.ApiService
 
 class StoryRepository private constructor(private val apiService: ApiService,private val userPreference: UserPreference){
 
+
     //For Api
-    suspend fun login(email: String,password: String ){
-        apiService.login(email,password)
-    }
+    suspend fun login(email: String,password: String ) = apiService.login(email,password)
+
 
     suspend fun signUp(name: String, email: String,password: String){
         apiService.register(name, email, password)
@@ -22,7 +22,7 @@ class StoryRepository private constructor(private val apiService: ApiService,pri
         userPreference.saveSession(user)
     }
 
-    suspend fun getSession(): Flow<UserModel> {
+    fun getSession(): Flow<UserModel> {
         return userPreference.getSession()
     }
 
