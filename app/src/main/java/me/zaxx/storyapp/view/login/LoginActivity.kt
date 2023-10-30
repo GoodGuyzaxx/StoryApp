@@ -43,9 +43,15 @@ class LoginActivity : AppCompatActivity() {
                 showToast(it.message)
             } else {
                 val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 showToast("Login ${it.message}")
+                finish()
             }
+        }
+
+        loginViewModel.isLoading.observe(this){
+            showLoading(it)
         }
 
         binding.btnlogin.setOnClickListener {
@@ -76,5 +82,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showToast(message: String){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoading(isLoading: Boolean){
+        if (isLoading){
+            binding.progressBar.visibility = View.VISIBLE
+        }else{
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }
