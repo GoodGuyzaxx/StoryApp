@@ -11,8 +11,10 @@ import me.zaxx.storyapp.data.pref.UserModel
 import me.zaxx.storyapp.data.pref.UserPreference
 import me.zaxx.storyapp.data.retrofit.ApiConfig
 import me.zaxx.storyapp.data.retrofit.ApiService
+import me.zaxx.storyapp.data.retrofit.response.DetailResponse
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.data.retrofit.response.RegisterResponse
+import me.zaxx.storyapp.data.retrofit.response.Story
 import me.zaxx.storyapp.data.retrofit.response.StoryResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +25,9 @@ class StoryRepository private constructor(private val apiService: ApiService,pri
 
     private val _listItem = MutableLiveData<List<ListStoryItem>>()
     val listItem: LiveData<List<ListStoryItem>> =_listItem
+
+    private val _detailItem = MutableLiveData<Story>()
+    val detailItem: LiveData<Story> = _detailItem
 
     //For Api
     suspend fun login(email: String,password: String ) = apiService.login(email,password)
@@ -44,6 +49,24 @@ class StoryRepository private constructor(private val apiService: ApiService,pri
             }
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
                 Log.e("TAG", "onFailure: ${t.message.toString()}", )
+            }
+
+        })
+    }
+
+    fun getDetailStory(token: String, id:String){
+        val client = apiService.getDetailStories("Bearer $token", id)
+        client.enqueue(object : Callback<DetailResponse>{
+            override fun onResponse(
+                call: Call<DetailResponse>,
+                response: Response<DetailResponse>
+            ) {
+                if (response.isSuccessful){
+                    _detailItem.value = response.body()?.story!!
+                }else Log.e("TAG", "onResponse: ${response.message()}", )
+            }
+            override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+                Log.d("TAG", "onFailure: ${t.message.toString()}")
             }
 
         })
