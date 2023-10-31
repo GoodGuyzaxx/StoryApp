@@ -3,10 +3,7 @@ package me.zaxx.storyapp.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import me.zaxx.storyapp.data.pref.UserModel
 import me.zaxx.storyapp.data.pref.UserPreference
 import me.zaxx.storyapp.data.retrofit.ApiConfig
@@ -16,10 +13,12 @@ import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.data.retrofit.response.RegisterResponse
 import me.zaxx.storyapp.data.retrofit.response.Story
 import me.zaxx.storyapp.data.retrofit.response.StoryResponse
+import me.zaxx.storyapp.data.retrofit.response.UploadResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.security.auth.login.LoginException
 
 class StoryRepository private constructor(private val apiService: ApiService,private val userPreference: UserPreference){
 
@@ -70,6 +69,13 @@ class StoryRepository private constructor(private val apiService: ApiService,pri
             }
 
         })
+    }
+
+    suspend fun addStory(
+        token: String,
+        multipartBody: MultipartBody.Part,
+        description: RequestBody):UploadResponse {
+        return apiService.uploadFile("Bearer $token", multipartBody, description)
     }
 
     //For DataStore

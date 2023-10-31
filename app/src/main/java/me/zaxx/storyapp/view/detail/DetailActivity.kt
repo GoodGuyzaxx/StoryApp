@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
-import me.zaxx.storyapp.R
 import me.zaxx.storyapp.data.retrofit.response.Story
 import me.zaxx.storyapp.databinding.ActivityDetailBinding
 import me.zaxx.storyapp.view.ViewModelFactory

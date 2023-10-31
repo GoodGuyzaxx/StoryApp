@@ -1,8 +1,6 @@
 package me.zaxx.storyapp.data.di
 
 import android.content.Context
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import me.zaxx.storyapp.data.pref.UserPreference
 import me.zaxx.storyapp.data.pref.dataStore
 import me.zaxx.storyapp.data.repository.StoryRepository

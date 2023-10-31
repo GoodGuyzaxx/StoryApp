@@ -9,7 +9,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import me.zaxx.storyapp.data.pref.UserModel
 import me.zaxx.storyapp.data.repository.StoryRepository
-import me.zaxx.storyapp.data.retrofit.ApiConfig
 import me.zaxx.storyapp.data.retrofit.response.LoginResponse
 import retrofit2.HttpException
 

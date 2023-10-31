@@ -3,19 +3,17 @@ package me.zaxx.storyapp.view.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import me.zaxx.storyapp.R
-import me.zaxx.storyapp.adapter.StoryListAdapter
+import me.zaxx.storyapp.view.adapter.StoryListAdapter
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.databinding.ActivityMainBinding
-import me.zaxx.storyapp.view.Upload.UploadActivity
+import me.zaxx.storyapp.view.upload.UploadActivity
 import me.zaxx.storyapp.view.ViewModelFactory
 import me.zaxx.storyapp.view.login.LoginActivity
 

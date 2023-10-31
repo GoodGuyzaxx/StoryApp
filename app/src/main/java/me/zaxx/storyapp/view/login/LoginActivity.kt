@@ -5,26 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.SpannedString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.zaxx.storyapp.R
-import me.zaxx.storyapp.data.retrofit.ApiConfig
-import me.zaxx.storyapp.data.retrofit.response.LoginResponse
 import me.zaxx.storyapp.databinding.ActivityLoginBinding
 import me.zaxx.storyapp.view.ViewModelFactory
 import me.zaxx.storyapp.view.main.MainActivity
 import me.zaxx.storyapp.view.signup.SignupActivity
-import retrofit2.HttpException
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding : ActivityLoginBinding

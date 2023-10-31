@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import me.zaxx.storyapp.data.repository.StoryRepository
-import me.zaxx.storyapp.data.retrofit.ApiConfig
-import me.zaxx.storyapp.data.retrofit.response.LoginResponse
 import me.zaxx.storyapp.data.retrofit.response.RegisterResponse
-import me.zaxx.storyapp.view.login.LoginViewModel
 import retrofit2.HttpException
 
 class SignupViewModel(private val repository: StoryRepository): ViewModel() {
