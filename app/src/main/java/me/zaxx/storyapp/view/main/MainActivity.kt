@@ -8,7 +8,12 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import me.zaxx.storyapp.R
+import me.zaxx.storyapp.adapter.StoryListAdapter
+import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.databinding.ActivityMainBinding
 import me.zaxx.storyapp.view.ViewModelFactory
 import me.zaxx.storyapp.view.login.LoginActivity
@@ -22,12 +27,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUpRecycleView()
 
         mainViewModel.getSession().observe(this){user ->
+            mainViewModel.getStory(user.token)
             if (!user.isLogin){
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
+        }
+
+        mainViewModel.listItem.observe(this){
+            getDataList(it)
         }
     }
 
@@ -42,5 +53,18 @@ class MainActivity : AppCompatActivity() {
             R.id.btnLogout -> mainViewModel.logout()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setUpRecycleView(){
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvList.layoutManager =layoutManager
+        val itemDecoration =DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvList.addItemDecoration(itemDecoration)
+    }
+
+    private fun getDataList(list: List<ListStoryItem>){
+        val adapter = StoryListAdapter()
+        adapter.submitList(list)
+        binding.rvList.adapter =adapter
     }
 }
