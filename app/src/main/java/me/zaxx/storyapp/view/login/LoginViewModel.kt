@@ -26,10 +26,15 @@ class LoginViewModel(private val repository: StoryRepository): ViewModel() {
         _isLoading.postValue(true)
         viewModelScope.launch {
             try {
-//                val response = repository.login(email, password)
-                val successResponse = ApiConfig.getApiService().login(email, password)
-                saveSession(UserModel(email,"token"))
-                _loginResponse.postValue(successResponse)
+                val response = repository.login(email, password)
+//                val successResponse = ApiConfig.getApiService("").login(email, password)
+                saveSession(UserModel(
+                    response.loginResult.userId,
+                    response.loginResult.name,
+                    response.loginResult.token,
+                    true
+                ))
+                _loginResponse.postValue(response)
             } catch (e: HttpException) {
                 val jsonString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonString, LoginResponse::class.java)
