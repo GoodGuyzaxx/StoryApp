@@ -1,5 +1,6 @@
 package me.zaxx.storyapp.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.data.retrofit.response.StoryResponse
 import me.zaxx.storyapp.databinding.ItemStoryListBinding
+import me.zaxx.storyapp.view.detail.DetailActivity
 
 class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHolder>(DIFF_CALLBACK) {
     inner class StoryViewHolder(private val binding: ItemStoryListBinding): RecyclerView.ViewHolder(binding.root)  {
@@ -30,6 +32,12 @@ class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHold
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         val user = getItem(position)
         holder.bind(user)
+
+        holder.itemView.setOnClickListener {
+            val intentDetail = Intent(holder.itemView.context, DetailActivity::class.java)
+            intentDetail.putExtra("USERID",user.id)
+            holder.itemView.context.startActivity(intentDetail)
+        }
     }
 
     companion object{
