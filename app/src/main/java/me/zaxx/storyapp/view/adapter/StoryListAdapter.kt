@@ -1,14 +1,15 @@
-package me.zaxx.storyapp.adapter
+package me.zaxx.storyapp.view.adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
-import me.zaxx.storyapp.data.retrofit.response.StoryResponse
 import me.zaxx.storyapp.databinding.ItemStoryListBinding
 import me.zaxx.storyapp.view.detail.DetailActivity
 
@@ -20,6 +21,12 @@ class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHold
                 .load(data.photoUrl)
                 .into(binding.ivItemList)
             binding.tvItemList.text = data.name
+
+            itemView.setOnClickListener {
+                val intentDetail = Intent(itemView.context, DetailActivity::class.java)
+                intentDetail.putExtra("USERID",data.id)
+                itemView.context.startActivity(intentDetail, ActivityOptionsCompat.makeSceneTransitionAnimation(itemView.context as Activity).toBundle())
+            }
         }
     }
 
@@ -32,12 +39,6 @@ class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHold
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         val user = getItem(position)
         holder.bind(user)
-
-        holder.itemView.setOnClickListener {
-            val intentDetail = Intent(holder.itemView.context, DetailActivity::class.java)
-            intentDetail.putExtra("USERID",user.id)
-            holder.itemView.context.startActivity(intentDetail)
-        }
     }
 
     companion object{
