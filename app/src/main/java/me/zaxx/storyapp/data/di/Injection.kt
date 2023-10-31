@@ -11,7 +11,6 @@ import me.zaxx.storyapp.data.retrofit.ApiConfig
 object Injection {
     fun provideRepository(context: Context): StoryRepository {
         val pref = UserPreference.getInstance(context.dataStore)
-//        val user = runBlocking { pref.getSession().first() }
         val apiService = ApiConfig.getApiService()
         return StoryRepository.getInstance(pref,apiService)
     }
