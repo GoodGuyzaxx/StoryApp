@@ -1,6 +1,5 @@
 package me.zaxx.storyapp.view
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +9,7 @@ import me.zaxx.storyapp.view.detail.DetailViewModel
 import me.zaxx.storyapp.view.login.LoginViewModel
 import me.zaxx.storyapp.view.main.MainViewModel
 import me.zaxx.storyapp.view.signup.SignupViewModel
+import me.zaxx.storyapp.view.upload.UploadViewModel
 
 class ViewModelFactory(private val repository: StoryRepository): ViewModelProvider.NewInstanceFactory() {
 
@@ -23,6 +23,8 @@ class ViewModelFactory(private val repository: StoryRepository): ViewModelProvid
             return MainViewModel(repository) as T
         }else if (modelClass.isAssignableFrom(DetailViewModel::class.java)){
             return DetailViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(UploadViewModel::class.java)){
+            return UploadViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknow ViewModel Class: ${modelClass.name}")
     }
