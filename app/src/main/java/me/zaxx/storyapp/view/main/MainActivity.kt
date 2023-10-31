@@ -15,6 +15,7 @@ import me.zaxx.storyapp.R
 import me.zaxx.storyapp.adapter.StoryListAdapter
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.databinding.ActivityMainBinding
+import me.zaxx.storyapp.view.Upload.UploadActivity
 import me.zaxx.storyapp.view.ViewModelFactory
 import me.zaxx.storyapp.view.login.LoginActivity
 
@@ -35,6 +36,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
             }
+        }
+
+        binding.fab.setOnClickListener {
+            val intentSendFile = Intent(this, UploadActivity::class.java)
+            startActivity(intentSendFile)
         }
 
         mainViewModel.listItem.observe(this){
