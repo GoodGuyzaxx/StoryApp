@@ -15,11 +15,17 @@
         android:theme="@style/Theme.StoryApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.Upload.UploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.detail.DetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.signup.SignupActivity"
             android:exported="false" />
         <activity
             android:name=".view.login.LoginActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".view.main.MainActivity"
             android:exported="true"
