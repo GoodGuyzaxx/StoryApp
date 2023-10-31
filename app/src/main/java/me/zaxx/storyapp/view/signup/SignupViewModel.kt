@@ -21,8 +21,8 @@ class SignupViewModel(private val repository: StoryRepository): ViewModel() {
     fun getRegister(name: String, email: String, password: String) {
         viewModelScope.launch {
             try {
-                val onResponse = ApiConfig.getApiService().register(name, email, password)
-                _signupResponse.postValue(onResponse)
+                val response = repository.register(name, email, password)
+                _signupResponse.postValue(response)
             }catch (e: HttpException) {
                 val jsonString = e.response()?.errorBody()?.string()
                 val errorBody = Gson().fromJson(jsonString, RegisterResponse::class.java)
