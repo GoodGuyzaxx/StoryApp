@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <me.zaxx.storyapp.costumeview.MyEditTextUser
             android:id="@+id/nameEditText"
             android:hint="@string/signup_name_text"
             android:inputType="textEmailAddress"
@@ -90,10 +90,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailEditLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <me.zaxx.storyapp.costumeview.MyEditText
             android:id="@+id/passwordEditTextEditText"
             android:hint="@string/password"
             android:inputType="textPassword"
+            android:ems="10"
             tools:ignore="Speak"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
