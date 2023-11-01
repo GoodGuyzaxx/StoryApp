@@ -1,5 +1,7 @@
 package me.zaxx.storyapp.view.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         signupText()
+        playAnimation()
 
         loginViewModel.loginResponse.observe(this){
             if (it.error) {
@@ -79,6 +82,28 @@ class LoginActivity : AppCompatActivity() {
             binding.progressBar.visibility = View.VISIBLE
         }else{
             binding.progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun playAnimation(){
+        ObjectAnimator.ofFloat(binding.ivLogin, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val description1 = ObjectAnimator.ofFloat(binding.tvDescription, View.ALPHA, 1F).setDuration(500)
+        val description2 = ObjectAnimator.ofFloat(binding.tvDescription2, View.ALPHA, 1F).setDuration(500)
+        val emailTv = ObjectAnimator.ofFloat(binding.emailEditText, View.ALPHA, 1F).setDuration(500)
+        val emailEdit = ObjectAnimator.ofFloat(binding.emailEditLayout, View.ALPHA, 1F).setDuration(500)
+        val passwordTv = ObjectAnimator.ofFloat(binding.passwordEditText, View.ALPHA, 1F).setDuration(500)
+        val passwordEdit = ObjectAnimator.ofFloat(binding.passwordEditLayout, View.ALPHA, 1F).setDuration(500)
+        val signupButton = ObjectAnimator.ofFloat(binding.btnlogin, View.ALPHA, 1F).setDuration(500)
+        val textSignup = ObjectAnimator.ofFloat(binding.tvSignup, View.ALPHA, 1F).setDuration(1000)
+
+        AnimatorSet().apply {
+            playSequentially(description1,description2,emailTv,emailEdit,passwordTv,passwordEdit,signupButton,textSignup)
+            start()
         }
     }
 }
