@@ -3,6 +3,7 @@ package me.zaxx.storyapp.view.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -12,10 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import me.zaxx.storyapp.R
 import me.zaxx.storyapp.view.adapter.StoryListAdapter
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
+import me.zaxx.storyapp.data.retrofit.response.StoryResponse
 import me.zaxx.storyapp.databinding.ActivityMainBinding
 import me.zaxx.storyapp.view.upload.UploadActivity
 import me.zaxx.storyapp.view.ViewModelFactory
+import me.zaxx.storyapp.view.adapter.LoadingStateAdapter
 import me.zaxx.storyapp.view.login.LoginActivity
+import me.zaxx.storyapp.view.maps.MapsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -29,9 +33,11 @@ class MainActivity : AppCompatActivity() {
         setUpRecycleView()
 
         mainViewModel.getSession().observe(this){user ->
-            mainViewModel.getStory(user.token)
-            if (!user.isLogin){
-                startActivity(Intent(this, LoginActivity::class.java))
+            val getToken = user.token
+            if (user.isLogin){
+                getDataList(getToken)
+            }else{
+                startActivity(Intent(this,LoginActivity::class.java))
                 finish()
             }
         }
@@ -41,9 +47,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intentSendFile)
         }
 
-        mainViewModel.listItem.observe(this){
-            getDataList(it)
-        }
+//        mainViewModel.listItem.observe(this){
+//            getDataList(lifecycle,it)
+//        }
     }
 
 
@@ -55,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.btnLogout -> mainViewModel.logout()
+            R.id.btnMaps -> startActivity(Intent(this,MapsActivity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }
@@ -66,9 +73,15 @@ class MainActivity : AppCompatActivity() {
         binding.rvList.addItemDecoration(itemDecoration)
     }
 
-    private fun getDataList(list: List<ListStoryItem>){
+    private fun getDataList(token: String){
         val adapter = StoryListAdapter()
-        adapter.submitList(list)
-        binding.rvList.adapter =adapter
+        binding.rvList.adapter =adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter{
+                adapter.retry()
+            }
+        )
+        mainViewModel.getStory(token).observe(this,{
+            adapter.submitData(lifecycle,it)
+        })
     }
 }
