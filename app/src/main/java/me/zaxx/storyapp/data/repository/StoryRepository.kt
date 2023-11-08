@@ -3,10 +3,16 @@ package me.zaxx.storyapp.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import me.zaxx.storyapp.data.paging.StoryPagingSource
 import me.zaxx.storyapp.data.pref.UserModel
 import me.zaxx.storyapp.data.pref.UserPreference
-import me.zaxx.storyapp.data.retrofit.ApiConfig
 import me.zaxx.storyapp.data.retrofit.ApiService
 import me.zaxx.storyapp.data.retrofit.response.DetailResponse
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
@@ -36,21 +42,54 @@ class StoryRepository private constructor(private val apiService: ApiService,pri
         return apiService.register(name, email, password)
     }
 
-    fun getStories(token: String){
-        val client = ApiConfig.getApiService().getStories("Bearer $token")
+//    fun getStories(token: String){
+//        val client = ApiConfig.getApiService().getStories("Bearer $token")
+//        client.enqueue(object : Callback<StoryResponse>{
+//            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
+//                if (response.isSuccessful){
+//                    _listItem.value = response.body()?.listStory
+//                }else{
+//                    Log.e("TAG", "onResponse: ${response.message()} ")
+//                }
+//            }
+//            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+//                Log.e("TAG", "onFailure: ${t.message.toString()}", )
+//            }
+//
+//        })
+//    }
+
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService, "Bearer $token")
+            }
+        ).liveData
+    }
+
+    fun getLocationData(token: String){
+        val client = apiService.getStoriesWithLocation("Bearer $token")
         client.enqueue(object : Callback<StoryResponse>{
             override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
                 if (response.isSuccessful){
                     _listItem.value = response.body()?.listStory
-                }else{
+                }else {
                     Log.e("TAG", "onResponse: ${response.message()} ")
                 }
             }
+
             override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
-                Log.e("TAG", "onFailure: ${t.message.toString()}", )
+                Log.e("TAG", "onFailure: ${t.message.toString()}")
             }
 
         })
+    }
+
+    fun getToken(){
+        runBlocking { userPreference.getSession().first().token }
     }
 
     fun getDetailStory(token: String, id:String){
@@ -62,7 +101,7 @@ class StoryRepository private constructor(private val apiService: ApiService,pri
             ) {
                 if (response.isSuccessful){
                     _detailItem.value = response.body()?.story!!
-                }else Log.e("TAG", "onResponse: ${response.message()}", )
+                }else Log.e("TAG", "onResponse: ${response.message()}")
             }
             override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
                 Log.d("TAG", "onFailure: ${t.message.toString()}")
