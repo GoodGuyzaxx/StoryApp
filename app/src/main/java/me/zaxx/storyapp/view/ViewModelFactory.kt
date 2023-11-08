@@ -8,6 +8,7 @@ import me.zaxx.storyapp.data.repository.StoryRepository
 import me.zaxx.storyapp.view.detail.DetailViewModel
 import me.zaxx.storyapp.view.login.LoginViewModel
 import me.zaxx.storyapp.view.main.MainViewModel
+import me.zaxx.storyapp.view.maps.MapsViewModel
 import me.zaxx.storyapp.view.signup.SignupViewModel
 import me.zaxx.storyapp.view.upload.UploadViewModel
 
@@ -25,6 +26,8 @@ class ViewModelFactory(private val repository: StoryRepository): ViewModelProvid
             return DetailViewModel(repository) as T
         }else if (modelClass.isAssignableFrom(UploadViewModel::class.java)){
             return UploadViewModel(repository) as T
+        }else if (modelClass.isAssignableFrom(MapsViewModel::class.java)){
+            return MapsViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknow ViewModel Class: ${modelClass.name}")
     }
@@ -37,19 +40,4 @@ class ViewModelFactory(private val repository: StoryRepository): ViewModelProvid
                 instance ?: ViewModelFactory(Injection.provideRepository(context))
             }.also { instance = it}
     }
-
-//    companion object{
-//        @Volatile
-//        private var INSTANCE: ViewModelFactory? = null
-//
-//        @JvmStatic
-//        fun getInstance(repository: StoryRepository): ViewModelFactory {
-//            if (INSTANCE == null){
-//                synchronized(ViewModelFactory::class.java) {
-//                    INSTANCE = ViewModelFactory(repository)
-//                }
-//            }
-//            return INSTANCE as ViewModelFactory
-//        }
-//    }
 }
