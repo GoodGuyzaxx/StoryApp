@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.viewModelFactory
 import me.zaxx.storyapp.R
 import me.zaxx.storyapp.databinding.ActivityUploadBinding
 import me.zaxx.storyapp.helper.getImageUri
@@ -62,7 +60,6 @@ class UploadActivity : AppCompatActivity() {
         }
     }
 
-
     private fun startCamera(){
         currentImageUri = getImageUri(this)
         launcherIntentCamera.launch(currentImageUri)
@@ -112,8 +109,8 @@ class UploadActivity : AppCompatActivity() {
         } ?: showToast(getString(R.string.empty_image_warning))
     }
 
-
     private fun showToast(message: String){
         Toast.makeText(this, message,Toast.LENGTH_SHORT).show()
     }
+
 }
