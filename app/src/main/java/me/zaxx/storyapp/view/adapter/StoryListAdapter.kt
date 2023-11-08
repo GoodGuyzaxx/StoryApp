@@ -5,15 +5,15 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import me.zaxx.storyapp.data.retrofit.response.ListStoryItem
 import me.zaxx.storyapp.databinding.ItemStoryListBinding
 import me.zaxx.storyapp.view.detail.DetailActivity
 
-class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHolder>(DIFF_CALLBACK) {
+class StoryListAdapter:PagingDataAdapter<ListStoryItem, StoryListAdapter.StoryViewHolder>(DIFF_CALLBACK) {
     inner class StoryViewHolder(private val binding: ItemStoryListBinding): RecyclerView.ViewHolder(binding.root)  {
         fun bind(data: ListStoryItem){
             Glide
@@ -38,7 +38,9 @@ class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHold
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         val user = getItem(position)
-        holder.bind(user)
+        if (user != null){
+            holder.bind(user)
+        }
     }
 
     companion object{
@@ -46,7 +48,6 @@ class StoryListAdapter:ListAdapter<ListStoryItem, StoryListAdapter.StoryViewHold
             override fun areItemsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
                 return oldItem.id == newItem.id
             }
-
             override fun areContentsTheSame(
                 oldItem: ListStoryItem,
                 newItem: ListStoryItem
