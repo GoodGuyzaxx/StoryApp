@@ -8,32 +8,32 @@ data class StoryResponse(
 	val listStory: List<ListStoryItem>,
 
 	@field:SerializedName("error")
-	val error: Boolean,
+	val error: Boolean? = null,
 
 	@field:SerializedName("message")
-	val message: String
+	val message: String? = null
 )
 
 data class ListStoryItem(
 
+	@field:SerializedName("id")
+	val id: String? = null,
+
 	@field:SerializedName("photoUrl")
-	val photoUrl: String,
+	val photoUrl: String? = null,
 
 	@field:SerializedName("createdAt")
-	val createdAt: String,
+	val createdAt: String? = null,
 
 	@field:SerializedName("name")
-	val name: String,
+	val name: String? = null,
 
 	@field:SerializedName("description")
-	val description: String,
+	val description: String? = null,
 
 	@field:SerializedName("lon")
-	val lon: Double,
-
-	@field:SerializedName("id")
-	val id: String,
+	val lon: Double? = null,
 
 	@field:SerializedName("lat")
-	val lat: Double
+	val lat: Double? = null
 )
